@@ -7,8 +7,8 @@ on:
     - development
     paths: 
     - 'Directory.Build.props'                                     # When the Global Props File Changes
-    - 'libraries/Client/src/**'
-    - '.github/workflows/assimalign.ograph.client.yml'        # When Pipeline File Changes
+    - 'libraries/Analyzers/Assimalign.CodeAnalysis.Internal//**'
+    - '.github/workflows/assimalign-analyzers-release.yml'        # When Pipeline File Changes
 
 
 jobs:
