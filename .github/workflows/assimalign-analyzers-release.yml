@@ -52,5 +52,5 @@ jobs:
     
     - name: Publish Nuget Package
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-      run: dotnet nuget push "*.nupkg" -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/assimalign/index.json --skip-duplicate --no-symbols 
-      working-directory: './libraries/Analyzers/Assimalign.CodeAnalysis.Internal/src/bin/Release/'
+      run: dotnet nuget push "*.nupkg" -k ${NUGET_KEY} -s https://nuget.pkg.github.com/assimalign/index.json --skip-duplicate --no-symbols 
+      working-directory: './libraries/Analyzers/Assimalign.CodeAnalysis.Internal/src/bin/Release'
