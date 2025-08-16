@@ -11,12 +11,6 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="DiagnosticAnalyzers\CodeStlye\" />
-	</ItemGroup>
-	<ItemGroup>
-		<!-- C#-only analyzer -->
 		<None Include="$(TargetPath)" Pack="true" PackagePath="analyzers/dotnet/cs" />
-		<!-- If language-agnostic instead, use: analyzers/dotnet -->
-		<!-- If VB, use: analyzers/dotnet/vb -->
 	</ItemGroup>
 </Project>

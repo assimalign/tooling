@@ -13,9 +13,9 @@ namespace Assimalign.CodeAnalysis.Internal;
 
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class InvalidAsyncMethodNameDiagnosticAnalyzer : DiagnosticAnalyzer
+internal class MethodsThatReturnTaskMustEndInAsyncDiagnosticAnalyzer : DiagnosticAnalyzer
 {
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(DiagnosticAnalyzerRules.InvalidAsyncMethodName);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(DiagnosticAnalyzerDescriptors.AA0001);
 
     public override void Initialize(AnalysisContext context)
     {
@@ -38,6 +38,8 @@ public class InvalidAsyncMethodNameDiagnosticAnalyzer : DiagnosticAnalyzer
                 return;
             }
 
+            var temp = methodSymbol.DeclaringSyntaxReferences;
+
             // Only consider methods (exclude accessors, etc.)
             if (methodSymbol.MethodKind != MethodKind.Ordinary)
             {
@@ -51,7 +53,7 @@ public class InvalidAsyncMethodNameDiagnosticAnalyzer : DiagnosticAnalyzer
             {
                 // Report diagnostic if name does not end with Async
                 context.ReportDiagnostic(Diagnostic.Create(
-                    DiagnosticAnalyzerRules.InvalidAsyncMethodName,
+                    DiagnosticAnalyzerDescriptors.AA0001,
                     declaration.Identifier.GetLocation(),
                     methodSymbol.Name));
             }
