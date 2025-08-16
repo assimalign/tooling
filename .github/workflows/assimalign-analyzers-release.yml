@@ -1,4 +1,4 @@
-name: ograph.client.ci
+name: assimalign-internal-analyzer-release
 
 on:
   push:
@@ -48,6 +48,7 @@ jobs:
     - name: Build Project
       run: dotnet build --configuration Release --no-restore
       working-directory: './libraries/Analyzers/Assimalign.CodeAnalysis.Internal/src'
+      
 
     # - name: Restore Unit Tests Project
     #   run: dotnet restore 
