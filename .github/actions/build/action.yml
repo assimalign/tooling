@@ -1,0 +1,77 @@
+name: Tooling Build
+description: Restores, builds, tests, and (on main, from Linux only) packs and pushes a tooling project to GitHub Packages.
+
+# Projects are laid out as <area>/<project>/{src,tests}, so a project's folder
+# name is also its assembly, project file, and package id. Everything below is
+# derived from those two inputs -- adding a library needs no edit here.
+inputs:
+  area:
+    description: The top-level folder that contains the project, such as libraries.
+    required: true
+  project:
+    description: The project folder, which is also the project file and package id.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        # The repo pins net10.0 through TargetFrameworksDefault in
+        # Directory.Build.props. Add a global.json and swap this for
+        # global-json-file if the SDK ever needs pinning to a patch.
+        dotnet-version: 10.x
+
+    - name: Restore ${{ inputs.project }}
+      shell: pwsh
+      run: dotnet restore "./${{ inputs.area }}/${{ inputs.project }}/src/${{ inputs.project }}.csproj"
+
+    - name: Build ${{ inputs.project }}
+      shell: pwsh
+      run: dotnet build "./${{ inputs.area }}/${{ inputs.project }}/src/${{ inputs.project }}.csproj" --configuration Release --no-restore
+
+    - name: Restore tests for ${{ inputs.project }}
+      if: ${{ hashFiles(format('{0}/{1}/tests/{1}.Tests.csproj', inputs.area, inputs.project)) != '' }}
+      shell: pwsh
+      run: dotnet restore "./${{ inputs.area }}/${{ inputs.project }}/tests/${{ inputs.project }}.Tests.csproj"
+
+    - name: Test ${{ inputs.project }}
+      if: ${{ hashFiles(format('{0}/{1}/tests/{1}.Tests.csproj', inputs.area, inputs.project)) != '' }}
+      shell: pwsh
+      run: dotnet test "./${{ inputs.area }}/${{ inputs.project }}/tests/${{ inputs.project }}.Tests.csproj" --configuration Release --no-restore
+
+    # -----------------------------------------------------------------
+    # Pack + push: only on main, only from Linux.
+    #
+    # The matrix runs three OSes; without the runner.os gate we'd try to
+    # push three identical .nupkgs. Linux is the cheapest runner, so it
+    # gets the publish job.
+    #
+    # The GitHub feed is used as a QA/UAT staging registry, so every
+    # push to main on the same version REPLACES the previous publish.
+    # Publish-Nupkg.ps1 deletes the existing version on the feed (if
+    # any) before pushing the fresh copy. No --skip-duplicate.
+    # -----------------------------------------------------------------
+
+    - name: Pack ${{ inputs.project }}
+      if: ${{ github.ref == 'refs/heads/main' && runner.os == 'Linux' }}
+      shell: pwsh
+      run: dotnet pack "./${{ inputs.area }}/${{ inputs.project }}/src/${{ inputs.project }}.csproj" --configuration Release --no-build
+
+    - name: Push ${{ inputs.project }} to GitHub Packages
+      if: ${{ github.ref == 'refs/heads/main' && runner.os == 'Linux' }}
+      shell: pwsh
+      env:
+        # Built-in workflow token; the workflow must declare
+        #   permissions:
+        #     packages: write
+        # for this to have rights to both push and delete on the feed.
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        $nupkg = Get-ChildItem -Path "./_out/packages" -Filter "${{ inputs.project }}.*.nupkg" -ErrorAction SilentlyContinue | Select-Object -First 1
+        if (-not $nupkg) {
+            Write-Host "No .nupkg produced for ${{ inputs.project }} (IsPackable=false?); skipping push."
+            exit 0
+        }
+        ./.github/scripts/Publish-Nupkg.ps1 -NupkgPath $nupkg.FullName

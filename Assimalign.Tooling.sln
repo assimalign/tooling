@@ -1,23 +1,8 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{F2E35B3E-9711-EDEC-6202-DB40BDEED14A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{E4085752-E947-6414-A044-5B50BB3C4F26}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{92292D2F-EA96-778A-47E2-301602C89FB2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assimalign.CodeAnalysis.Internal", "libraries\Analyzers\Assimalign.CodeAnalysis.Internal\src\Assimalign.CodeAnalysis.Internal.csproj", "{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8B98DE9C-82D9-4BB4-8D88-B0F4B199878B}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\assimalign-analyzers-release.yml = .github\workflows\assimalign-analyzers-release.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tooling", "tooling", "{A009F8B1-D5E5-4678-A914-0A3FD06FD0DF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -26,7 +11,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tooling", "tooling", "{A009
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{12E433C1-3A66-4123-972B-87C2DA620766}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\actions\build\action.yml = .github\actions\build\action.yml
+		.github\scripts\Publish-Nupkg.ps1 = .github\scripts\Publish-Nupkg.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8B98DE9C-82D9-4BB4-8D88-B0F4B199878B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\library-dotnet-extensions.yml = .github\workflows\library-dotnet-extensions.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{E0F0B59B-AA63-D195-56B1-FC2A14D6127C}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\Directory.Build.props = libraries\Directory.Build.props
+		libraries\Directory.Build.targets = libraries\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assimalign.Tooling.DotNetExtensions", "Assimalign.Tooling.DotNetExtensions", "{6301D24C-8E6C-4505-B3E6-122CD654695C}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\Assimalign.Tooling.DotNetExtensions\README.md = libraries\Assimalign.Tooling.DotNetExtensions\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A6D35CD0-140A-407D-8038-B1EE4771F86C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assimalign.Tooling.DotNetExtensions", "libraries\Assimalign.Tooling.DotNetExtensions\src\Assimalign.Tooling.DotNetExtensions.csproj", "{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F9C5BF20-B0F0-48C4-980C-C6D808A51E00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assimalign.Tooling.DotNetExtensions.Tests", "libraries\Assimalign.Tooling.DotNetExtensions\tests\Assimalign.Tooling.DotNetExtensions.Tests.csproj", "{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,30 +51,43 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|x64.Build.0 = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Debug|x86.Build.0 = Debug|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|x64.ActiveCfg = Release|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|x64.Build.0 = Release|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|x86.ActiveCfg = Release|Any CPU
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2}.Release|x86.Build.0 = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|x64.Build.0 = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Debug|x86.Build.0 = Debug|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|x64.ActiveCfg = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|x64.Build.0 = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|x86.ActiveCfg = Release|Any CPU
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F}.Release|x86.Build.0 = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|x64.Build.0 = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Debug|x86.Build.0 = Debug|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|x64.ActiveCfg = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|x64.Build.0 = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|x86.ActiveCfg = Release|Any CPU
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F2E35B3E-9711-EDEC-6202-DB40BDEED14A} = {A009F8B1-D5E5-4678-A914-0A3FD06FD0DF}
-		{E4085752-E947-6414-A044-5B50BB3C4F26} = {F2E35B3E-9711-EDEC-6202-DB40BDEED14A}
-		{92292D2F-EA96-778A-47E2-301602C89FB2} = {E4085752-E947-6414-A044-5B50BB3C4F26}
-		{1BEDBD50-0006-405B-AC96-CB43DA0F0EA2} = {92292D2F-EA96-778A-47E2-301602C89FB2}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {A009F8B1-D5E5-4678-A914-0A3FD06FD0DF}
 		{8B98DE9C-82D9-4BB4-8D88-B0F4B199878B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{12E433C1-3A66-4123-972B-87C2DA620766} = {E4085752-E947-6414-A044-5B50BB3C4F26}
+		{E0F0B59B-AA63-D195-56B1-FC2A14D6127C} = {A009F8B1-D5E5-4678-A914-0A3FD06FD0DF}
+		{6301D24C-8E6C-4505-B3E6-122CD654695C} = {E0F0B59B-AA63-D195-56B1-FC2A14D6127C}
+		{A6D35CD0-140A-407D-8038-B1EE4771F86C} = {6301D24C-8E6C-4505-B3E6-122CD654695C}
+		{705B604E-ECFD-4EA4-9E11-C7A5E5C7688F} = {A6D35CD0-140A-407D-8038-B1EE4771F86C}
+		{F9C5BF20-B0F0-48C4-980C-C6D808A51E00} = {6301D24C-8E6C-4505-B3E6-122CD654695C}
+		{04B0E6E4-0F1B-4C9B-8E4E-9B2A6F4D1C33} = {F9C5BF20-B0F0-48C4-980C-C6D808A51E00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9B81EE11-825F-4B87-A7AC-AEC4FCA4757C}

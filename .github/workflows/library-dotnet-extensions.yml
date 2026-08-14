@@ -1,0 +1,41 @@
+name: DotNet Extensions
+on:
+  push:
+    paths:
+      - "libraries/Assimalign.Tooling.DotNetExtensions/**"
+      - "Directory.Build.props" # When the Global Props File Changes
+      - "Directory.Build.targets" # When the Global Targets File Changes
+      - ".github/actions/build/action.yml" # When the Shared Build Action Changes
+      - ".github/scripts/Publish-Nupkg.ps1" # When the Publish Script Changes
+      - ".github/workflows/library-dotnet-extensions.yml" # When Pipeline File Changes
+  workflow_dispatch:
+
+# Back-to-back pushes to the same branch shouldn't queue three OS builds each.
+concurrency:
+  group: dotnet-extensions-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: "${{ matrix.projects }} [${{ matrix.os }}]"
+    runs-on: ${{ matrix.os }}
+    continue-on-error: false
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        projects: [
+            "Assimalign.Tooling.DotNetExtensions"
+          ]
+    steps:
+      - uses: actions/checkout@v4
+        name: "Checkout: ${{ matrix.projects }}"
+
+      - uses: ./.github/actions/build
+        name: "Running Build & Tests: ${{ matrix.projects }}"
+        with:
+          area: 'libraries'
+          project: ${{ matrix.projects }}

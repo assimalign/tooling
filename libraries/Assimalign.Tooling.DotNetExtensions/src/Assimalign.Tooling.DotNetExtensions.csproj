@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>$(TargetFrameworksDefault)</TargetFramework>
+		<RootNamespace>Assimalign.Tooling.DotNetExtensions</RootNamespace>
+		<AssemblyName>dotnet-extension</AssemblyName>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+	<!-- .NET Tool Packaging: installing globally puts 'dotnet-assimalign' on the PATH which
+	     lets the .NET CLI resolve it as the 'dotnet assimalign' verb. -->
+	<PropertyGroup>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>dotnet-assimalign</ToolCommandName>
+		<PackageId>Assimalign.Tooling.DotNetExtensions</PackageId>
+		<Description>Assimalign tooling that extends the .NET CLI with the 'dotnet assimalign' verb.</Description>
+		<PackageTags>dotnet;cli;tool;assimalign;slnx</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="System.CommandLine" />
+	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="Assimalign.Tooling.DotNetExtensions.Tests" />
+	</ItemGroup>
+</Project>

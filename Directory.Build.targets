@@ -4,6 +4,11 @@
 		<PackageReference Update="Sharprompt" Version="3.0.0" />
 	</ItemGroup>
 
+	<!-- CLI Build Dependencies -->
+	<ItemGroup>
+		<PackageReference Update="System.CommandLine" Version="2.0.0" />
+	</ItemGroup>
+
 	<!-- Analyzer Build Dependencies -->
 	<ItemGroup>
 		<PackageReference Update="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />

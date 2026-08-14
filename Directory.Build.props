@@ -2,6 +2,9 @@
 	<PropertyGroup>
 		<Authors>Chase Crawford</Authors>
 		<RepositoryType>git</RepositoryType>
+		<!-- GitHub Packages links a package to a repository through this URL. Without it the
+		     publish is rejected for the workflow's GITHUB_TOKEN. -->
+		<RepositoryUrl>https://github.com/assimalign/tooling</RepositoryUrl>
 		<Company>Assimalign</Company>
 		<Copyright>© Assimalign $([System.DateTime]::Now.ToString(`yyyy`))</Copyright>
 		<LangVersion>preview</LangVersion>
@@ -21,5 +24,12 @@
 	<!-- Cohesion Build Properties -->
 	<PropertyGroup>
 		<Version>$(MajorVersion).$(MinorVersion).$(PatchVersion)</Version>
+	</PropertyGroup>
+	<!-- Output Layout: every package lands in one place so the release pipeline has a single
+	     directory to collect from, and a local 'dotnet pack' behaves the same way CI does. -->
+	<PropertyGroup>
+		<RepositoryDirectory>$(MSBuildThisFileDirectory)</RepositoryDirectory>
+		<OutputDirectory>$(RepositoryDirectory)_out</OutputDirectory>
+		<PackageOutputPath>$(OutputDirectory)/packages</PackageOutputPath>
 	</PropertyGroup>
 </Project>
