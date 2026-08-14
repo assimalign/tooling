@@ -3,16 +3,17 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>$(TargetFrameworksDefault)</TargetFramework>
 		<RootNamespace>Assimalign.Tooling.DotNetExtensions</RootNamespace>
-		<AssemblyName>dotnet-extension</AssemblyName>
+		<!-- Matches ToolCommandName so the name in help output is the name used to invoke it. -->
+		<AssemblyName>dotnet-extensions</AssemblyName>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
-	<!-- .NET Tool Packaging: installing globally puts 'dotnet-assimalign' on the PATH which
-	     lets the .NET CLI resolve it as the 'dotnet assimalign' verb. -->
+	<!-- .NET Tool Packaging: installing globally puts 'dotnet-extensions' on the PATH which
+	     lets the .NET CLI resolve it as the 'dotnet extensions' verb. -->
 	<PropertyGroup>
 		<PackAsTool>true</PackAsTool>
-		<ToolCommandName>dotnet-assimalign</ToolCommandName>
+		<ToolCommandName>dotnet-extensions</ToolCommandName>
 		<PackageId>Assimalign.Tooling.DotNetExtensions</PackageId>
-		<Description>Assimalign tooling that extends the .NET CLI with the 'dotnet assimalign' verb.</Description>
+		<Description>Assimalign tooling that extends the .NET CLI with the 'dotnet extensions' verb.</Description>
 		<PackageTags>dotnet;cli;tool;assimalign;slnx</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>

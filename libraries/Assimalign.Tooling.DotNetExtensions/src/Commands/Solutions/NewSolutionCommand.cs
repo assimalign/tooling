@@ -8,7 +8,7 @@ using Assimalign.Tooling.DotNetExtensions.Framework;
 namespace Assimalign.Tooling.DotNetExtensions.Commands.Solutions;
 
 /// <summary>
-/// 'dotnet assimalign solution new' - generates an XML solution file from a directory tree.
+/// 'dotnet extensions sln new' - generates an XML solution file from a directory tree.
 /// </summary>
 public sealed class NewSolutionCommand : ToolCommand
 {

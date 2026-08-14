@@ -8,7 +8,7 @@ public class NewSolutionCommandTests
     [Fact]
     public void Parse_AcceptsTheDocumentedInvocation()
     {
-        ParseResult result = Parse(@"solution new C:\repo\src --name Example --include-references --force --ignore bin --ignore obj");
+        ParseResult result = Parse(@"sln new C:\repo\src --name Example --include-references --force --ignore bin --ignore obj");
 
         Assert.Empty(result.Errors);
     }
@@ -16,19 +16,20 @@ public class NewSolutionCommandTests
     [Fact]
     public void Parse_ExposesTheCommandUnderItsAlias()
     {
-        Assert.Empty(Parse(@"sln create C:\repo\src -n Example").Errors);
+        // 'solution' aliases the 'sln' group; 'create' aliases 'new'.
+        Assert.Empty(Parse(@"solution create C:\repo\src -n Example").Errors);
     }
 
     [Fact]
     public void Parse_RequiresAPath()
     {
-        Assert.NotEmpty(Parse("solution new").Errors);
+        Assert.NotEmpty(Parse("sln new").Errors);
     }
 
     [Fact]
     public void Parse_AcceptsMultipleIgnorePatternsPerToken()
     {
-        ParseResult result = Parse(@"solution new C:\repo\src -n Example --ignore bin obj");
+        ParseResult result = Parse(@"sln new C:\repo\src -n Example --ignore bin obj");
 
         Assert.Empty(result.Errors);
     }
@@ -39,7 +40,7 @@ public class NewSolutionCommandTests
     [InlineData(@"Models/Sql=\Sql.Client,\Sql.Storage")]
     public void Parse_AcceptsGroupValues(string group)
     {
-        Assert.Empty(Parse($@"solution new C:\repo\src -n Example --group {group}").Errors);
+        Assert.Empty(Parse($@"sln new C:\repo\src -n Example --group {group}").Errors);
     }
 
     [Theory]
@@ -48,7 +49,7 @@ public class NewSolutionCommandTests
     [InlineData("Models/Sql=")]
     public void Parse_RejectsMalformedGroupValues(string group)
     {
-        Assert.NotEmpty(Parse($@"solution new C:\repo\src -n Example --group {group}").Errors);
+        Assert.NotEmpty(Parse($@"sln new C:\repo\src -n Example --group {group}").Errors);
     }
 
     [Fact]

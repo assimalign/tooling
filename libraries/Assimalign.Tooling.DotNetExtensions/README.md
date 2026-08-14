@@ -1,7 +1,7 @@
 # Assimalign.Tooling.DotNetExtensions
 
-A .NET tool that extends the .NET CLI with the `assimalign` verb. Installing it globally puts
-`dotnet-assimalign` on the `PATH`, which is how the .NET CLI resolves `dotnet assimalign <command>`.
+A .NET tool that extends the .NET CLI with the `extensions` verb. Installing it globally puts
+`dotnet-extensions` on the `PATH`, which is how the .NET CLI resolves `dotnet extensions <command>`.
 
 ```
 libraries/Assimalign.Tooling.DotNetExtensions
@@ -21,17 +21,17 @@ dotnet tool install --global --add-source _out/packages Assimalign.Tooling.DotNe
 ```
 
 During development the built executable can be run directly out of
-`libraries/Assimalign.Tooling.DotNetExtensions/src/bin/Debug/net10.0/dotnet-extension.exe`.
+`libraries/Assimalign.Tooling.DotNetExtensions/src/bin/Debug/net10.0/dotnet-extensions.exe`.
 
 ## Commands
 
-### `solution new`
+### `sln new`
 
 Generates an XML based (`.slnx`) solution file from a directory tree. This is the port of the
 `New-CohesionDotnetSolution` PowerShell cmdlet, and produces byte identical output.
 
 ```powershell
-dotnet assimalign solution new ./libraries/Core/Assimalign.Cohesion.Core.slnx `
+dotnet extensions sln new ./libraries/Core/Assimalign.Cohesion.Core.slnx `
     --root-folder Core `
     --include-references `
     --force `
