@@ -4,28 +4,37 @@ namespace Assimalign.Tooling.DotNetExtensions.Tests;
 
 public class NewSolutionOptionsTests
 {
+    // A rooted directory spelled the way the running OS spells one. It never has to exist;
+    // resolution is pure path arithmetic.
+    private static readonly string RootedDirectory =
+        Path.GetFullPath(Path.Combine(Path.GetTempPath(), "repo", "src"));
+
     [Fact]
     public void ResolvePath_SplitsASolutionFilePath()
     {
-        (string directory, string fileName) = NewSolutionOptions.ResolvePath(@"C:\repo\src\Example.slnx", null);
+        (string directory, string fileName) = NewSolutionOptions.ResolvePath(
+            Path.Combine(RootedDirectory, "Example.slnx"),
+            null);
 
-        Assert.Equal(@"C:\repo\src", directory);
+        Assert.Equal(RootedDirectory, directory);
         Assert.Equal("Example.slnx", fileName);
     }
 
     [Fact]
     public void ResolvePath_TakesTheNameFromTheNameOption()
     {
-        (string directory, string fileName) = NewSolutionOptions.ResolvePath(@"C:\repo\src", "Example");
+        (string directory, string fileName) = NewSolutionOptions.ResolvePath(RootedDirectory, "Example");
 
-        Assert.Equal(@"C:\repo\src", directory);
+        Assert.Equal(RootedDirectory, directory);
         Assert.Equal("Example.slnx", fileName);
     }
 
     [Fact]
     public void ResolvePath_PrefersAnExplicitNameOverTheOneInThePath()
     {
-        (_, string fileName) = NewSolutionOptions.ResolvePath(@"C:\repo\src\FromPath.slnx", "FromName");
+        (_, string fileName) = NewSolutionOptions.ResolvePath(
+            Path.Combine(RootedDirectory, "FromPath.slnx"),
+            "FromName");
 
         Assert.Equal("FromName.slnx", fileName);
     }
@@ -33,7 +42,7 @@ public class NewSolutionOptionsTests
     [Fact]
     public void ResolvePath_KeepsAnExtensionAlreadyOnTheName()
     {
-        (_, string fileName) = NewSolutionOptions.ResolvePath(@"C:\repo\src", "Example.slnx");
+        (_, string fileName) = NewSolutionOptions.ResolvePath(RootedDirectory, "Example.slnx");
 
         Assert.Equal("Example.slnx", fileName);
     }
@@ -59,15 +68,17 @@ public class NewSolutionOptionsTests
     [Fact]
     public void ResolvePath_TrimsATrailingSeparatorFromTheDirectory()
     {
-        (string directory, _) = NewSolutionOptions.ResolvePath(@"C:\repo\src\", "Example");
+        (string directory, _) = NewSolutionOptions.ResolvePath(
+            RootedDirectory + Path.DirectorySeparatorChar,
+            "Example");
 
-        Assert.Equal(@"C:\repo\src", directory);
+        Assert.Equal(RootedDirectory, directory);
     }
 
     [Fact]
     public void ResolvePath_ThrowsWhenNoNameCanBeDetermined()
     {
-        Assert.Throws<ArgumentException>(() => NewSolutionOptions.ResolvePath(@"C:\repo\src", null));
+        Assert.Throws<ArgumentException>(() => NewSolutionOptions.ResolvePath(RootedDirectory, null));
     }
 
     [Fact]
@@ -75,10 +86,10 @@ public class NewSolutionOptionsTests
     {
         NewSolutionOptions options = new()
         {
-            SolutionDirectory = @"C:\repo\src",
+            SolutionDirectory = RootedDirectory,
             SolutionFileName = "Example.slnx"
         };
 
-        Assert.Equal(@"C:\repo\src\Example.slnx", options.SolutionFilePath);
+        Assert.Equal(Path.Combine(RootedDirectory, "Example.slnx"), options.SolutionFilePath);
     }
 }

@@ -22,7 +22,7 @@ internal sealed class TestWorkspace : IDisposable
     /// </summary>
     public string AddFile(string relativePath, string content = "")
     {
-        string path = Path.Join(Root, relativePath);
+        string path = Resolve(relativePath);
 
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 
@@ -56,11 +56,21 @@ internal sealed class TestWorkspace : IDisposable
     /// </summary>
     public string AddDirectory(string relativePath)
     {
-        string path = Path.Join(Root, relativePath);
+        string path = Resolve(relativePath);
 
         Directory.CreateDirectory(path);
 
         return path;
+    }
+
+    /// <summary>
+    /// Roots a workspace relative path. Tests spell paths with '\', which is a separator on
+    /// Windows but an ordinary filename character everywhere else, so it is translated to
+    /// whatever the running OS separates directories with.
+    /// </summary>
+    public string Resolve(string relativePath)
+    {
+        return Path.Join(Root, relativePath.Replace('\\', Path.DirectorySeparatorChar));
     }
 
     public void Dispose()

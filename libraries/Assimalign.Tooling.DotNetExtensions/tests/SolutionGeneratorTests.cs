@@ -334,7 +334,7 @@ public class SolutionGeneratorTests
     {
         return new NewSolutionOptions
         {
-            SolutionDirectory = Path.Join(workspace.Root, relativeDirectory),
+            SolutionDirectory = workspace.Resolve(relativeDirectory),
             SolutionFileName = "Example.slnx"
         };
     }
