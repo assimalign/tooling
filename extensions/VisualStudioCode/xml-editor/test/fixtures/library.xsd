@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="urn:library"
+           targetNamespace="urn:library"
+           elementFormDefault="qualified">
+  <xs:include schemaLocation="common.xsd"/>
+
+  <xs:element name="library">
+    <xs:annotation>
+      <xs:documentation>
+        A collection of books.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string"/>
+        <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="item" type="itemType" abstract="true"/>
+  <xs:element name="book" type="bookType" substitutionGroup="item"/>
+  <xs:element name="magazine" type="itemType" substitutionGroup="item"/>
+
+  <xs:complexType name="itemType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="identity"/>
+  </xs:complexType>
+
+  <xs:complexType name="bookType">
+    <xs:complexContent>
+      <xs:extension base="itemType">
+        <xs:sequence>
+          <xs:element name="author" type="xs:string" maxOccurs="unbounded"/>
+          <xs:element name="format" type="formatType" minOccurs="0"/>
+          <xs:element name="note" type="noteType" minOccurs="0"/>
+          <xs:element name="extra" minOccurs="0">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+              <xs:anyAttribute namespace="##any"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="available" type="xs:boolean"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="noteType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="lang" type="xs:language"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:simpleType name="formatType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="hardcover"/>
+      <xs:enumeration value="paperback"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
