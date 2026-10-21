@@ -64,6 +64,21 @@ describe('validateDocument', () => {
         assert.deepEqual(messages('<anything xmlns="urn:unknown"><x y="z"/></anything>', await loadFixtures('library.xsd')), []);
     });
 
+    it('does not validate content admitted only by a skip wildcard', async () => {
+        const schemas = new SchemaSet();
+        const { readSchemaDocument } = await import('../src/core/schema');
+        schemas.add(readSchemaDocument(
+            '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">'
+            + '<xs:element name="r"><xs:complexType><xs:sequence>'
+            + '<xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>'
+            + '</xs:sequence></xs:complexType></xs:element>'
+            + '<xs:element name="strict"><xs:complexType/></xs:element>'
+            + '</xs:schema>',
+            'file:///r.xsd'));
+
+        assert.deepEqual(messages('<r><strict unexpected="1"><child/></strict></r>', schemas), []);
+    });
+
     it('reports undeclared prefixes without a schema', () => {
         assert.deepEqual(messages('<p:root/>', undefined), ['The namespace prefix \'p\' is not declared.']);
     });

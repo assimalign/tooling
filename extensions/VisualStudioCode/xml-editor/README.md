@@ -62,6 +62,10 @@ entry for you.
 are followed from there. Schemas are cached; the cache is cleared whenever an `.xsd` file in the
 workspace is saved or changes on disk, when these settings change, and by **XML: Reload Schemas**.
 
+For MSBuild files (`.csproj`, `.props`, `.targets`, ...), the repository has a ready-made
+workspace at [`samples/msbuild`](samples/msbuild) with a schema generated from Microsoft's MSBuild
+schema and the settings that enable it.
+
 ## Settings
 
 | Setting | Default | Description |

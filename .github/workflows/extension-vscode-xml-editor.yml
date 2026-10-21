@@ -134,7 +134,7 @@ jobs:
               }
             }
 
-            $unexpected = @($entries | Where-Object { $_ -match '^extension/(node_modules|src|test|out/test|\.vscode-test)/' -or $_ -match '\.(ts|map)$' })
+            $unexpected = @($entries | Where-Object { $_ -match '^extension/(node_modules|src|test|samples|out/test|\.vscode-test)/' -or $_ -match '\.(ts|map)$' })
             if ($unexpected.Count -gt 0) {
               throw "The VSIX contains development files: $($unexpected -join ', ')"
             }

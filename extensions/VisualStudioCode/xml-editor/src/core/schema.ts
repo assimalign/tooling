@@ -38,6 +38,8 @@ export interface Wildcard {
     /** The raw `namespace` attribute: `##any`, `##other`, or a list of URIs, `##targetNamespace`, `##local`. */
     readonly namespaces: string;
     readonly targetNamespace: string;
+    /** `skip` admits content without validating it; `lax` validates what the loaded schemas declare. */
+    readonly processContents: 'strict' | 'lax' | 'skip';
 }
 
 export interface ElementDeclaration {
@@ -417,7 +419,12 @@ class SchemaReader {
     }
 
     private readWildcard(element: XmlElement): Wildcard {
-        return { namespaces: attributeValue(element, 'namespace') ?? '##any', targetNamespace: this.targetNamespace };
+        const processContents = attributeValue(element, 'processContents');
+        return {
+            namespaces: attributeValue(element, 'namespace') ?? '##any',
+            targetNamespace: this.targetNamespace,
+            processContents: processContents === 'lax' || processContents === 'skip' ? processContents : 'strict'
+        };
     }
 
     /** Reads attribute, attributeGroup, and anyAttribute children of a type, extension, or group. */
@@ -620,10 +627,10 @@ const anyTypeDefinition: ComplexTypeDefinition = {
         kind: 'any',
         min: 0,
         max: Number.POSITIVE_INFINITY,
-        wildcard: { namespaces: '##any', targetNamespace: '' }
+        wildcard: { namespaces: '##any', targetNamespace: '', processContents: 'lax' }
     },
     attributes: [],
-    anyAttribute: { namespaces: '##any', targetNamespace: '' }
+    anyAttribute: { namespaces: '##any', targetNamespace: '', processContents: 'lax' }
 };
 
 const builtInSimpleTypes = new Map<string, SimpleTypeDefinition>(builtInTypeNames
@@ -709,6 +716,7 @@ export class SchemaSet {
     private readonly groups = new Map<ComponentKey, Particle>();
     private readonly attributeGroups = new Map<ComponentKey, AttributeGroupDefinition>();
     private readonly substitutions = new Map<ComponentKey, ElementDeclaration[]>();
+    private readonly referencedElements = new Set<ComponentKey>();
     private readonly namespaces = new Set<string>();
 
     public add(document: SchemaDocument): void {
@@ -726,6 +734,13 @@ export class SchemaSet {
                 members.push(declaration);
                 this.substitutions.set(declaration.substitutionGroup, members);
             }
+            collectElementReferences(declaration.type, this.referencedElements);
+        }
+        for (const type of document.types.values()) {
+            collectElementReferences(type, this.referencedElements);
+        }
+        for (const group of document.groups.values()) {
+            collectParticleReferences(group, this.referencedElements);
         }
     }
 
@@ -744,6 +759,20 @@ export class SchemaSet {
 
     public globalElements(): ElementDeclaration[] {
         return [...this.elements.values()];
+    }
+
+    /**
+     * Global elements likely to be document roots: those no content model references and that do
+     * not substitute for another element. A vocabulary such as MSBuild declares hundreds of global
+     * elements, but only `Project` is meant to start a document. Falls back to every non-abstract
+     * global element when the heuristic leaves nothing.
+     */
+    public rootElements(): ElementDeclaration[] {
+        const candidates = this.globalElements().filter(declaration => !declaration.abstract);
+        const roots = candidates.filter(declaration =>
+            declaration.substitutionGroup === undefined
+            && !this.referencedElements.has(componentKey(declaration.namespace, declaration.name)));
+        return roots.length > 0 ? roots : candidates;
     }
 
     public globalAttributes(): AttributeDeclaration[] {
@@ -1053,6 +1082,32 @@ export class SchemaSet {
                 return base?.kind === 'simple' && this.isClosedEnumeration(base, seen);
             }
         }
+    }
+}
+
+function collectElementReferences(type: TypeDefinition | undefined, references: Set<ComponentKey>): void {
+    if (type?.kind === 'complex' && type.particle !== undefined) {
+        collectParticleReferences(type.particle, references);
+    }
+}
+
+function collectParticleReferences(particle: Particle, references: Set<ComponentKey>): void {
+    switch (particle.kind) {
+        case 'element':
+            if (particle.ref !== undefined) {
+                references.add(particle.ref);
+            }
+            collectElementReferences(particle.declaration?.type, references);
+            return;
+        case 'sequence':
+        case 'choice':
+        case 'all':
+            for (const child of particle.particles) {
+                collectParticleReferences(child, references);
+            }
+            return;
+        default:
+            return;
     }
 }
 

@@ -181,7 +181,7 @@ function elementNameCompletions(document: XmlDocument, context: ElementNameConte
 function elementCandidates(model: DocumentModel, element: XmlElement, parent: XmlElement | undefined): ElementCandidate[] | undefined {
     const schemas = model.schemas;
     if (parent === undefined) {
-        const roots = schemas.globalElements().filter(declaration => !declaration.abstract);
+        const roots = schemas.rootElements();
         return roots.length === 0
             ? undefined
             : roots.map((declaration, order) => ({ declaration, required: false, order, fromWildcard: false }));
@@ -213,11 +213,15 @@ function elementCandidates(model: DocumentModel, element: XmlElement, parent: Xm
     }
 
     if (children.wildcards.length > 0) {
+        // A wildcard admits foreign content. The schema's own vocabulary is already listed where it
+        // belongs, and a skip wildcard declares its content opaque, so neither is expanded into the
+        // global elements of the loaded schemas; that would only bury the real choices.
         let order = candidates.length;
+        const expandable = children.wildcards.filter(wildcard => wildcard.processContents !== 'skip');
         for (const declaration of schemas.globalElements()) {
             if (!declaration.abstract
                 && !children.elements.has(`{${declaration.namespace}}${declaration.name}`)
-                && children.wildcards.some(wildcard => wildcardAllows(wildcard, declaration.namespace))) {
+                && expandable.some(wildcard => declaration.namespace !== wildcard.targetNamespace && wildcardAllows(wildcard, declaration.namespace))) {
                 candidates.push({ declaration, required: false, order: order++, fromWildcard: true });
             }
         }

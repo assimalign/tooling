@@ -22,7 +22,8 @@ describe('element completion', () => {
         const schemas = await loadFixtures('library.xsd');
         const suggestions = complete('<|', schemas);
 
-        assert.deepEqual(labels(suggestions).sort(), ['book', 'library', 'magazine']);
+        // book and magazine substitute for item, so they belong inside library, not at the root.
+        assert.deepEqual(labels(suggestions), ['library']);
         const library = suggestions.find(suggestion => suggestion.label === 'library')!;
         assert.equal(library.insertText, 'library xmlns="urn:library" version="${1}"$2>$0</library>');
         assert.equal(library.isSnippet, true);

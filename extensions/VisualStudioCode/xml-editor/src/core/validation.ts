@@ -110,8 +110,10 @@ function validateElement(model: DocumentModel, element: XmlElement, diagnostics:
             validateElement(model, child, diagnostics);
         }
         else if (children.wildcards.some(wildcard => wildcardAllows(wildcard, namespace))) {
-            // Lax processing: validate what the loaded schemas know, accept what they do not.
-            if (model.declarationOf(child) !== undefined && schemas.governs(namespace)) {
+            // Lax (and, conservatively, strict) processing: validate what the loaded schemas know,
+            // accept what they do not. Content admitted only by skip wildcards is never validated.
+            const validated = children.wildcards.some(wildcard => wildcardAllows(wildcard, namespace) && wildcard.processContents !== 'skip');
+            if (validated && model.declarationOf(child) !== undefined && schemas.governs(namespace)) {
                 validateElement(model, child, diagnostics);
             }
         }

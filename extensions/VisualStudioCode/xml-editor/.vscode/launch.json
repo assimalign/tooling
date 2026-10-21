@@ -10,6 +10,14 @@
       "preLaunchTask": "npm: compile"
     },
     {
+      "name": "Run XML Editor Extension (MSBuild sample)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["${workspaceFolder}/samples/msbuild", "--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/out/src/**/*.js"],
+      "preLaunchTask": "npm: compile"
+    },
+    {
       "name": "Run Integration Tests",
       "type": "extensionHost",
       "request": "launch",

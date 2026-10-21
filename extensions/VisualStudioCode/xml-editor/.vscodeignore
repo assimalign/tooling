@@ -6,6 +6,7 @@
 node_modules/**
 out/**/*.map
 out/test/**
+samples/**
 src/**
 test/**
 tsconfig.json
