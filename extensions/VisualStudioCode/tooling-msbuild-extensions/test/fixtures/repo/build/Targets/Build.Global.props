@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- The repository root, with a trailing slash. -->
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..'))\</RepoRoot>
+    <RepoOutputPath>$(RepoRoot)_out</RepoOutputPath>
+  </PropertyGroup>
+</Project>

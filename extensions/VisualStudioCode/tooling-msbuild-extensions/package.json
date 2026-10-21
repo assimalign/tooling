@@ -1,0 +1,120 @@
+{
+  "name": "tooling-msbuild-extensions",
+  "displayName": "Assimalign MSBuild Extensions",
+  "description": "MSBuild IntelliSense for project, props, and targets files: the MSBuild schema, plus the custom properties, items, and tasks found by following each file's import chain.",
+  "version": "0.1.0",
+  "publisher": "assimalign",
+  "license": "MIT",
+  "preview": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/assimalign/tooling.git",
+    "directory": "extensions/VisualStudioCode/tooling-msbuild-extensions"
+  },
+  "bugs": {
+    "url": "https://github.com/assimalign/tooling/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "msbuild",
+    "csproj",
+    "props",
+    "targets",
+    "intellisense"
+  ],
+  "main": "./out/src/extension.js",
+  "activationEvents": [
+    "onLanguage:xml"
+  ],
+  "extensionDependencies": [
+    "assimalign.tooling-xml-editor"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "msbuildExtensions.showImportChain",
+        "title": "Show Import Chain",
+        "category": "MSBuild"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "msbuildExtensions.showImportChain",
+          "when": "editorLangId == xml"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MSBuild Extensions",
+      "properties": {
+        "msbuildExtensions.fileExtensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\.[^\\s/\\\\]+$"
+          },
+          "default": [
+            ".csproj",
+            ".vbproj",
+            ".fsproj",
+            ".proj",
+            ".props",
+            ".targets"
+          ],
+          "scope": "window",
+          "markdownDescription": "File extensions that get MSBuild IntelliSense. Each also needs to open as XML; VS Code already maps these defaults to XML."
+        },
+        "msbuildExtensions.importChain.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "markdownDescription": "Follow `<Import>` elements and offer the custom properties, items, and tasks defined or used in the imported files."
+        },
+        "msbuildExtensions.importChain.implicitImports": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "markdownDescription": "Also follow the files MSBuild imports implicitly into projects in the same folder: the nearest `Directory.Build.props`, `Directory.Packages.props`, and `Directory.Build.targets`."
+        },
+        "msbuildExtensions.importChain.additionalFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "resource",
+          "markdownDescription": "Glob patterns, relative to the workspace folder, of MSBuild files whose vocabulary is always offered even though nothing imports them (for example `build/Targets/*.targets` packed into NuGet packages)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "check": "tsc -b",
+    "test": "npm run compile && node --test \"out/test/**/*.test.js\"",
+    "test:integration": "npm run compile && node ./out/test/integration/runTests.js",
+    "package": "vsce package",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "1.85.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "typescript": "^5.4.0"
+  }
+}

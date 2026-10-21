@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run MSBuild Extensions (with XML Editor)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "${workspaceFolder}/test/fixtures",
+        "--extensionDevelopmentPath=${workspaceFolder}/../tooling-xml-editor",
+        "--extensionDevelopmentPath=${workspaceFolder}"
+      ],
+      "outFiles": ["${workspaceFolder}/out/src/**/*.js", "${workspaceFolder}/../tooling-xml-editor/out/src/**/*.js"],
+      "preLaunchTask": "npm: compile"
+    }
+  ]
+}
