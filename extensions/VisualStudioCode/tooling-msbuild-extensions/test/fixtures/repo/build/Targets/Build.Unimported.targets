@@ -1,0 +1,6 @@
+<Project>
+  <!-- Packed into a NuGet package for consumers; nothing in the repository imports it. -->
+  <PropertyGroup>
+    <RepoConsumerOnly>true</RepoConsumerOnly>
+  </PropertyGroup>
+</Project>

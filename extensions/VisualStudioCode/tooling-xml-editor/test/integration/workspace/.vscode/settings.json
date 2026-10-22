@@ -1,0 +1,14 @@
+{
+  "xmlEditor.schemas": [
+    {
+      "fileMatch": ["library/*.xml"],
+      "url": "../../fixtures/library.xsd"
+    },
+    {
+      "namespace": "urn:catalog",
+      "url": "${workspaceFolder}/schemas/catalog.xsd"
+    }
+  ],
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2
+}

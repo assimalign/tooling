@@ -1,0 +1,4 @@
+<Project>
+  <!-- Every props file under Targets, in name order. -->
+  <Import Project="Targets\*.props" />
+</Project>

@@ -1,0 +1,21 @@
+<!--
+  Every marked line is a mistake the XML editor reports with the generated MSBuild schema.
+  Custom property, item, metadata, and task names are not mistakes: MSBuild accepts any name.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 'Conditon' is a typo for Condition. -->
+  <PropertyGroup Conditon="'$(Configuration)' == 'Debug'">
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- A target needs a Name. -->
+  <Target BeforeTargets="Build">
+    <!-- The Message task has no 'Txt' parameter. -->
+    <Message Txt="Hello" />
+  </Target>
+
+  <!-- Import requires Project; 'Projct' is not an attribute. -->
+  <Import Projct="Build.targets" />
+
+</Project>

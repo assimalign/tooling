@@ -1,0 +1,27 @@
+<Project>
+  <Import Project="$(RepoRoot)eng\Shared.targets" />
+
+  <!-- Writes the version into a file at build time. -->
+  <UsingTask TaskName="Repo.Tasks.StampVersion" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Version ParameterType="System.String" Required="true" />
+      <OutputFile ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">System.IO.File.WriteAllText(OutputFile, Version);</Code>
+    </Task>
+  </UsingTask>
+
+  <ItemGroup>
+    <!-- Extra files placed in every package. -->
+    <RepoPackageFile Include="$(RepoRoot)LICENSE" PackagePath="\">
+      <!-- Whether the file is signed. -->
+      <Signed>false</Signed>
+    </RepoPackageFile>
+  </ItemGroup>
+
+  <Target Name="RepoStampVersion" Condition="'$(RepoPackEnabled)' == 'true'" BeforeTargets="Build">
+    <StampVersion Version="$(RepoVersion)" OutputFile="$(RepoOutputPath)\version.txt" Overwrite="true" />
+    <Message Text="Packing @(RepoPackageFile)" />
+  </Target>
+</Project>

@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup>
+    <RepoShared>true</RepoShared>
+  </PropertyGroup>
+</Project>

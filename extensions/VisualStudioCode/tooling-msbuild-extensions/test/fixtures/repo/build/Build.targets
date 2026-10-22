@@ -1,0 +1,5 @@
+<Project>
+  <Import Project="Targets\Build.Packaging.targets" />
+  <!-- Opt-in; skipped unless a project sets RepoUseOptional. -->
+  <Import Project="$(RepoRoot)eng\Optional.targets" Condition="'$(RepoUseOptional)' == 'true' and Exists('$(RepoRoot)eng\Optional.targets')" />
+</Project>

@@ -1,0 +1,62 @@
+# Builds, tests, packages, and publishes the Visual Studio Code extensions under
+# extensions/VisualStudioCode through the reusable vscode-extension.yml.
+#
+# Assimalign MSBuild Extensions depends on Assimalign XML Editor (extensionDependencies, and a
+# TypeScript project reference to its API types), so it runs after the XML editor's jobs: on main,
+# the XML editor reaches the Marketplace before any extension that requires it.
+name: VS Code Extensions
+
+on:
+  push:
+    paths:
+      - "extensions/VisualStudioCode/**"
+      - ".github/workflows/extensions-vscode.yml" # When Pipeline File Changes
+      - ".github/workflows/vscode-extension.yml"
+  pull_request:
+    paths:
+      - "extensions/VisualStudioCode/**"
+      - ".github/workflows/extensions-vscode.yml"
+      - ".github/workflows/vscode-extension.yml"
+  workflow_dispatch:
+    inputs:
+      pre-release:
+        description: Publish on the Marketplace pre-release channel.
+        type: boolean
+        default: false
+
+# Never cancel a run on main mid-publish; superseded branch runs can go.
+concurrency:
+  group: vscode-extensions-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  xml-editor:
+    name: XML Editor
+    uses: ./.github/workflows/vscode-extension.yml
+    with:
+      directory: extensions/VisualStudioCode/tooling-xml-editor
+      required-entries: |
+        extension/schemas/XMLSchema.xsd
+      pre-release: ${{ github.event_name == 'workflow_dispatch' && inputs.pre-release }}
+    secrets:
+      VS_MARKETPLACE_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+
+  msbuild-extensions:
+    name: MSBuild Extensions
+    needs: xml-editor
+    uses: ./.github/workflows/vscode-extension.yml
+    with:
+      directory: extensions/VisualStudioCode/tooling-msbuild-extensions
+      dependency-directories: extensions/VisualStudioCode/tooling-xml-editor
+      required-entries: |
+        extension/schemas/Microsoft.Build.xsd
+        extension/schemas/Microsoft.Build.Namespaced.xsd
+        extension/schemas/MSBuild/Microsoft.Build.Core.xsd
+        extension/schemas/MSBuild/Microsoft.Build.CommonTypes.xsd
+        extension/schemas/LICENSE.txt
+      pre-release: ${{ github.event_name == 'workflow_dispatch' && inputs.pre-release }}
+    secrets:
+      VS_MARKETPLACE_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}

@@ -1,0 +1,7 @@
+<Project>
+  <!-- Version stamped into every package. -->
+  <PropertyGroup>
+    <RepoVersion>1.2.3</RepoVersion>
+    <RepoVersionSuffix Condition="'$(RepoVersionSuffix)' == ''">preview</RepoVersionSuffix>
+  </PropertyGroup>
+</Project>

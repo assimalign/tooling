@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SampleBanner>Custom properties are allowed</SampleBanner>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Optimize Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</Optimize>
+    <DebugType>$(SampleDebugType)</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="10.0.0" PrivateAssets="all" />
+    <ProjectReference Include="..\Library\Library.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <Compile Include="..\Shared\*.cs" Link="Shared\%(Filename)%(Extension)" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <SampleAsset Include="assets\**\*" />
+  </ItemGroup>
+
+  <Import Project="Build.targets" />
+
+</Project>
